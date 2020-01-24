@@ -1,0 +1,14 @@
+
+# Lines beginning with a # are comments, and are only included for
+# illustration. These comments are overkill for most inventory files.
+
+# Servers for WordPress task
+[wpservers]
+192.168.88.10
+192.168.88.11
+192.168.88.12
+
+[wpservers:vars]
+ansible_ssh_user=vagrant
+ansible_ssh_private_key_file=~/.vagrant.d/insecure_private_key
+

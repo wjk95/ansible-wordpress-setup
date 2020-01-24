@@ -1,0 +1,41 @@
+---
+- hosts: wpservers
+  become: yes
+  vars:
+    http_port: 80
+    max_clients: 200
+  vars_files:
+    - vars/main.yml
+  remote_user: root
+  tasks:
+  - name: Installing epel-release and yum-utils to download updated version of PHP
+    yum: pkg={{ item }} state=present
+    with_items:
+    - epel-release
+    - yum-utils
+    - http://rpms.remirepo.net/enterprise/remi-release-7.rpm
+
+  - name: enabling the PHP 7.3 Remi repository
+    command: yum-config-manager --enable remi-php73 -y
+
+  - name: Installing PHP and other pkgs
+    yum: pkg={{ item }}  state=present
+    with_items:
+    - php
+    - php-common
+    - php-mysql
+    - php-gd
+    - php-xml
+    - php-mbstring
+    - php-mcrypt
+    - php-xmlrpc
+    - unzip
+    - wget
+  - name: Installing and Configuring MariaDB and MariaDB-CLient For WordPress
+    include_tasks: database.yml
+
+  - name : Installing and configuring httpd server for WordPress
+    include_tasks: webserver.yml
+
+  - name: Dwonloading and configuring WordPress 
+    include_tasks: wordpress.yml

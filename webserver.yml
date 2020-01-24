@@ -1,0 +1,14 @@
+- name: Installing Apache web server
+  yum: pkg=httpd state=present
+
+- name: Starting and enabling httpd
+  service: name=httpd state=restarted enabled=yes
+
+- name: Enabling http service on the remote host
+  firewalld:
+    service: http
+    permanent: true
+    state: enabled
+
+- name: Reloading firewalld service after enabling http service
+  service: name=firewalld state=restarted enabled=yes
